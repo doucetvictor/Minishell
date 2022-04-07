@@ -9,6 +9,7 @@ NAME	=	mysh
 
 SRCS	=	src/cmd.c \
 		src/main.c \
+		src/minishell1.c \
 		src/minishell2.c
 
 OBJS	=	$(SRCS:.c=.o)

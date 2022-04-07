@@ -2,32 +2,36 @@
 ** EPITECH PROJECT, 2022
 ** mysh
 ** File description:
-** minishell1.c
+** minishell2.c
 */
 
 #include <stdio.h>
-#include <sys/wait.h>
-#include <unistd.h>
+#include <stdlib.h>
 #include "minishell2.h"
 #include "my.h"
 
-int minishell2(char *line, char **env)
+static int minishell2_getline(char **line, size_t *line_len, char **env)
 {
-    if (line[0] == 'e' && line[1] == 'x' && line[2] == 'i' && line[3] == 't')
+    if (getline(line, line_len, stdin) == -1)
         return 0;
-
-    char **arr = my_str_split(line, ' ');
-
-    int pid = fork();
-    if (pid) {
-        waitpid(pid, 0, 0);
-    } else {
-        if (line[0] == '/')
-            my_exec(arr[0], arr, env);
-        else if (line[0] != '\0')
-            found_cmd(arr[0], arr, env);
+    (*line)[my_strlen(*line) - 1] = '\0';
+    if (!minishell1(*line, env))
         return 0;
-    }
-
     return 1;
+}
+
+int minishell2(char **env)
+{
+    char *line = 0;
+    size_t line_len = 0;
+    int ret = 1;
+
+    while (ret) {
+        my_putstr("$> ");
+        if (!minishell2_getline(&line, &line_len, env))
+            ret = 0;
+    }
+    if (line)
+        free(line);
+    return ret;
 }
