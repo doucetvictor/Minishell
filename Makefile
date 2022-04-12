@@ -17,7 +17,7 @@ OBJS	=	$(SRCS:.c=.o)
 CC		=	gcc
 CFLAGS		=	-Wall -Wextra -Wpedantic
 CPPFLAGS	=	-Iinclude/ -Ilib/my/include/
-LDLIBS		=	-Llib/my/ -lmy -lncurses
+LDLIBS		=	-Llib/my/ -lmy
 
 all:	$(NAME)
 
