@@ -11,7 +11,7 @@
 void my_exec(char *cmd, char **arr, char **env);
 void found_cmd(char *arg0, char **arr, char **env);
 
-int minishell1(char *line, char **env);
+int minishell1(char **arr, char **env);
 
 int minishell2(char **env);
 
