@@ -21,8 +21,10 @@ static void not_found(char *path)
     }
 }
 
-static void my_cd(char **arr)
+static void my_cd(char **arr, char **env)
 {
+    char *home = 0;
+
     if (arr[1] && arr[2]) {
         my_putstr("cd: Too many arguments.\n");
     } else if (arr[1]) {
@@ -30,14 +32,19 @@ static void my_cd(char **arr)
             not_found(arr[1]);
         }
     } else {
-        
+        home = get_home(env);
+        if (home) {
+            chdir(home);
+        } else {
+            my_putstr("cd: No home directory.\n");
+        }
     }
 }
 
-static int builtins(char **arr)
+static int builtins(char **arr, char **env)
 {
     if (my_strcmp(arr[0], "cd") == 0) {
-        my_cd(arr);
+        my_cd(arr, env);
         return 1;
     }
     return 0;
@@ -55,7 +62,7 @@ int minishell1(char **arr, char **env)
 {
     int pid = 0;
 
-    if (!arr[0] || builtins(arr))
+    if (!arr[0] || builtins(arr, env))
         return 1;
     if (my_strcmp(arr[0], "exit") == 0)
         return 0;

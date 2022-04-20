@@ -8,6 +8,7 @@
 NAME	=	mysh
 
 SRCS	=	src/cmd.c \
+		src/env.c \
 		src/main.c \
 		src/minishell1.c \
 		src/minishell2.c
