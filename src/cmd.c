@@ -14,12 +14,8 @@
 
 static void not_found(char *cmd)
 {
-    my_putstr("mysh: ");
     my_putstr(cmd);
-    if (my_strstr(cmd, "/") || cmd[my_strlen(cmd) - 1] == '/')
-        my_putstr(": No such file or directory\n");
-    else
-        my_putstr(": command not found\n");
+    my_putstr(": Command not found.\n");
 }
 
 void my_exec(char *cmd, char **arr, char **env)
@@ -29,9 +25,8 @@ void my_exec(char *cmd, char **arr, char **env)
 
     if (dir) {
         closedir(dir);
-        my_putstr("mysh: ");
         my_putstr(cmd);
-        my_putstr(": Is a directory\n");
+        my_putstr(": Permission denied.\n");
     } else {
         not_found(cmd);
     }
