@@ -35,6 +35,7 @@ static void my_cd(char **arr, char **env)
         home = get_home(env);
         if (home) {
             chdir(home);
+            free(home);
         } else {
             my_putstr("cd: No home directory.\n");
         }

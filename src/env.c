@@ -28,3 +28,8 @@ char* get_home(char **env)
 {
     return get_var(env, "HOME");
 }
+
+char* get_path(char **env)
+{
+    return get_var(env, "PATH");
+}

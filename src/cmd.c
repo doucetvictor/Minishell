@@ -32,19 +32,6 @@ void my_exec(char *cmd, char **arr, char **env)
     }
 }
 
-static char** get_path(char **env)
-{
-    char **args = 0;
-
-    for (int i = 0; env[i]; i++) {
-        args = my_str_split(env[i], '=');
-        if (my_strcmp(args[0], "PATH") == 0) {
-            return my_str_split(args[1], ':');
-        }
-    }
-    return 0;
-}
-
 static int my_exec_if_exist(char *cmd, char **arr, char **env)
 {
     int fd = open(cmd, O_RDONLY);
@@ -59,7 +46,7 @@ static int my_exec_if_exist(char *cmd, char **arr, char **env)
 
 void found_cmd(char *arg0, char **arr, char **env)
 {
-    char **path = get_path(env);
+    char **path = my_str_split(get_path(env), ':');
     char *cmd = 0;
     int len = 0;
     int ret = 0;
