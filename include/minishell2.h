@@ -8,6 +8,8 @@
 #ifndef MINISHELL2_H
     #define MINISHELL2_H
 
+int builtins(char **arr, char **env);
+
 void my_exec(char *cmd, char **arr, char **env);
 void found_cmd(char *arg0, char **arr, char **env);
 
