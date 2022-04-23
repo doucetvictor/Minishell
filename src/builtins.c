@@ -47,7 +47,7 @@ static void my_setenv(char **arr)
     if (arr[1] && arr[2] && arr[3]) {
         my_putstr("setenv: Too many arguments.\n");
     } else if (arr[1] && arr[2]) {
-        
+        ;
     } else {
         my_putstr("setenv: Not enough arguments.\n");
     }
@@ -58,7 +58,7 @@ static void my_unsetenv(char **arr)
     if (arr[1] && arr[2] && arr[3]) {
         my_putstr("unsetenv: Too many arguments.\n");
     } else if (arr[1] && arr[2]) {
-        
+        ;
     } else {
         my_putstr("unsetenv: Not enough arguments.\n");
     }
