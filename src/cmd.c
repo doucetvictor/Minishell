@@ -20,9 +20,10 @@ static void not_found(char *cmd)
 
 void my_exec(char *cmd, char **arr, char **env)
 {
-    int err = execve(cmd, arr, env);
-    DIR *dir = opendir(cmd);
+    DIR *dir = 0;
 
+    execve(cmd, arr, env);
+    dir = opendir(cmd);
     if (dir) {
         closedir(dir);
         my_putstr(cmd);

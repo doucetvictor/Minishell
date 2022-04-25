@@ -27,7 +27,9 @@ static void my_cd(char **arr, char **env)
 
     if (arr[1] && arr[2]) {
         my_putstr("cd: Too many arguments.\n");
-    } else if (arr[1]) {
+        return;
+    }
+    if (arr[1]) {
         if (chdir(arr[1]) != 0) {
             not_found(arr[1]);
         }
