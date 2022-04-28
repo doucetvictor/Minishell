@@ -15,7 +15,11 @@ static void not_found(char *path)
 {
     my_putstr(path);
     if (access(path, F_OK) == 0) {
-        my_putstr(": Not a directory.\n");
+        if (access(path, R_OK) == 0) {
+            my_putstr(": Not a directory.\n");
+        } else {
+            my_putstr(": Permission denied.\n");
+        }
     } else {
         my_putstr(": No such file or directory.\n");
     }
