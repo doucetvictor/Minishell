@@ -10,6 +10,8 @@
 
 int builtins(char **arr, char **env);
 
+void handle_cmd(char *path);
+
 void my_exec(char *cmd, char **arr, char **env);
 void found_cmd(char *arg0, char **arr, char **env);
 

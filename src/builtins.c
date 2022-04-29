@@ -5,25 +5,10 @@
 ** builtins.c
 */
 
-#include <fcntl.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include "minishell2.h"
 #include "my.h"
-
-static void not_found(char *path)
-{
-    my_putstr(path);
-    if (access(path, F_OK) == 0) {
-        if (access(path, R_OK) == 0) {
-            my_putstr(": Not a directory.\n");
-        } else {
-            my_putstr(": Permission denied.\n");
-        }
-    } else {
-        my_putstr(": No such file or directory.\n");
-    }
-}
 
 static void my_cd(char **arr, char **env)
 {
@@ -35,7 +20,7 @@ static void my_cd(char **arr, char **env)
     }
     if (arr[1]) {
         if (chdir(arr[1]) != 0) {
-            not_found(arr[1]);
+            handle_cmd(arr[1]);
         }
     } else {
         home = get_home(env);

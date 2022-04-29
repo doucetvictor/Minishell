@@ -26,8 +26,7 @@ void my_exec(char *cmd, char **arr, char **env)
     dir = opendir(cmd);
     if (dir) {
         closedir(dir);
-        my_putstr(cmd);
-        my_putstr(": Permission denied.\n");
+        handle_cmd(cmd);
     } else {
         not_found(cmd);
     }
