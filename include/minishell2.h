@@ -8,6 +8,8 @@
 #ifndef MINISHELL2_H
     #define MINISHELL2_H
 
+int arr_size(char **arr);
+
 int builtins(char **arr, char **env);
 
 void handle_cmd(char *path);
@@ -18,7 +20,7 @@ void found_cmd(char *arg0, char **arr, char **env);
 char* get_home(char **env);
 char* get_path(char **env);
 
-int minishell1(char **arr, char **env);
+int minishell1(char **arr, char **env, int last);
 
 int minishell2(char **env);
 
