@@ -34,10 +34,11 @@ static int minishell2_exec(char **cmd, char **env, int pids_len)
     pid_t *pids = malloc(sizeof(pid_t) * pids_len);
     char **args = 0;
     pid_t pid = 0;
+    int oldfd[2];
 
     for (int i = 0; cmd[i]; i++) {
         args = init_args(cmd[i]);
-        pid = minishell1(args, env, i == pids_len - 1);
+        pid = minishell1(args, env, oldfd, i == 0, i == pids_len - 1);
         deinit_args(args);
         if (pid != 0) {
             pids[i] = pid;
