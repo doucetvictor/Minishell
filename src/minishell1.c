@@ -24,7 +24,7 @@ static void my_dup2(int *pipefd, int std)
     close(pipefd[1]);
 }
 
-int minishell1(char **arr, char **env, int oldfd[2], int first, int last)
+int minishell1(char **arr, char **env, int oldfd[2], int first_last[2])
 {
     int pipefd[2];
     int pid = 0;
@@ -33,23 +33,23 @@ int minishell1(char **arr, char **env, int oldfd[2], int first, int last)
         return 1;
     if (my_strcmp(arr[0], "exit") == 0)
         return 0;
-    if (!last && pipe(pipefd) == -1)
+    if (!first_last[1] && pipe(pipefd) == -1)
         return 0;
     pid = fork();
     if (pid == -1)
         return 0;
     if (pid == 0) {
-        if (!first)
+        if (!first_last[0])
             my_dup2(oldfd, 0);
-        if (!last)
+        if (!first_last[1])
             my_dup2(pipefd, 1);
         child_exec(arr, env);
     } else {
-        if (!first) {
+        if (!first_last[0]) {
             close(oldfd[0]);
             close(oldfd[1]);
         }
-        if (!last) {
+        if (!first_last[1]) {
             oldfd[0] = pipefd[0];
             oldfd[1] = pipefd[1];
         }

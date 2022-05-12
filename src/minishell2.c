@@ -38,7 +38,7 @@ static int minishell2_exec(char **cmd, char **env, int pids_len)
 
     for (int i = 0; cmd[i]; i++) {
         args = init_args(cmd[i]);
-        pid = minishell1(args, env, oldfd, i == 0, i == pids_len - 1);
+        pid = minishell1(args, env, oldfd, (int[2]){i == 0, i == pids_len - 1});
         deinit_args(args);
         if (pid != 0) {
             pids[i] = pid;
