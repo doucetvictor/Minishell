@@ -29,7 +29,7 @@ static void deinit_args(char **arr)
     free(arr);
 }
 
-static int minishell2_exec(char **cmd, char **env, int pids_len)
+static int minishell2_exec(char **cmd, char **env, char **oldpwd, int pids_len)
 {
     pid_t *pids = malloc(sizeof(pid_t) * pids_len);
     char **args = 0;
@@ -38,7 +38,7 @@ static int minishell2_exec(char **cmd, char **env, int pids_len)
 
     for (int i = 0; cmd[i]; i++) {
         args = init_args(cmd[i]);
-        pid = minishell1(args, env, oldfd, (int[2]){i == 0, i == pids_len - 1});
+        pid = minishell1(args, env, oldpwd, oldfd, (int[2]){i == 0, i == pids_len - 1});
         deinit_args(args);
         if (pid != 0) {
             pids[i] = pid;
@@ -53,7 +53,7 @@ static int minishell2_exec(char **cmd, char **env, int pids_len)
     return 1;
 }
 
-static int minishell2_parse(char *line, char **env)
+static int minishell2_parse(char *line, char **env, char **oldpwd)
 {
     char **arr = my_str_split(line, ';');
     char **cmd = 0;
@@ -61,7 +61,7 @@ static int minishell2_parse(char *line, char **env)
 
     for (int i = 0; res && arr[i]; i++) {
         cmd = my_str_split(arr[i], '|');
-        res = minishell2_exec(cmd, env, arr_size(cmd));
+        res = minishell2_exec(cmd, env, oldpwd, arr_size(cmd));
         deinit_args(cmd);
     }
     deinit_args(arr);
@@ -70,20 +70,24 @@ static int minishell2_parse(char *line, char **env)
 
 int minishell2(char **env)
 {
+    char **oldpwd = malloc(sizeof(char*));
     char *line = 0;
     size_t line_len = 0;
     int ret = 1;
 
+    *oldpwd = malloc(1);
+    *oldpwd[0] = '\0';
     while (ret) {
         my_putstr("$> ");
         if (getline(&line, &line_len, stdin) == -1)
             ret = 0;
         else
             line[my_strlen(line) - 1] = '\0';
-        if (ret && !minishell2_parse(line, env))
+        if (ret && !minishell2_parse(line, env, oldpwd))
             ret = 0;
     }
-    if (line)
-        free(line);
+    free(line);
+    free(*oldpwd);
+    free(oldpwd);
     return ret;
 }

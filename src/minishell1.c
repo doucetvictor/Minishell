@@ -24,12 +24,12 @@ static void my_dup2(int *pipefd, int std)
     close(pipefd[1]);
 }
 
-int minishell1(char **arr, char **env, int oldfd[2], int first_last[2])
+int minishell1(char **arr, char **env, char **oldpwd, int oldfd[2], int first_last[2])
 {
     int pipefd[2];
     int pid = 0;
 
-    if (!arr[0] || builtins(arr, env))
+    if (!arr[0] || builtins(arr, env, oldpwd))
         return 1;
     if (my_strcmp(arr[0], "exit") == 0)
         return 0;

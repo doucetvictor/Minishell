@@ -10,7 +10,23 @@
 #include "minishell2.h"
 #include "my.h"
 
-static void my_cd(char **arr, char **env)
+static int my_chdir(char *path, char **oldpwd)
+{
+    char *my_oldpwd = *oldpwd;
+    int res = 0;
+
+    *oldpwd = getcwd(0, 0);
+    if (my_strcmp(path, "-") == 0) {
+        path[0] = '\0';
+        res = chdir(my_oldpwd);
+    } else {
+        res = chdir(path);
+    }
+    free(my_oldpwd);
+    return res;
+}
+
+static void my_cd(char **arr, char **env, char **oldpwd)
 {
     char *home = 0;
 
@@ -19,13 +35,13 @@ static void my_cd(char **arr, char **env)
         return;
     }
     if (arr[1]) {
-        if (chdir(arr[1]) != 0) {
+        if (my_chdir(arr[1], oldpwd) != 0) {
             handle_cmd(arr[1]);
         }
     } else {
         home = get_home(env);
         if (home) {
-            chdir(home);
+            my_chdir(home, oldpwd);
             free(home);
         } else {
             my_putstr("cd: No home directory.\n");
@@ -55,10 +71,10 @@ static void my_unsetenv(char **arr)
     }
 }
 
-int builtins(char **arr, char **env)
+int builtins(char **arr, char **env, char **oldpwd)
 {
     if (my_strcmp(arr[0], "cd") == 0) {
-        my_cd(arr, env);
+        my_cd(arr, env, oldpwd);
         return 1;
     }
     if (my_strcmp(arr[0], "env") == 0) {
